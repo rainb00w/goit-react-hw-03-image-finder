@@ -17,7 +17,6 @@ class App extends Component {
     loading: false,
     error: null,
     showModal: false,
-    modalContent: null,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -35,6 +34,7 @@ class App extends Component {
   };
 
   increasePage = () => {
+    // console.log('PAGGE +1');
     this.setState({ page: this.state.page + 1 });
   };
 
@@ -43,7 +43,7 @@ class App extends Component {
   };
 
   toggleModal = () => {
-    this.setState({ showModal: !this.state.showModal });
+    this.setState(({ showModal }) => ({ showModal: !showModal }));
   };
 
   async Fetch() {
@@ -70,12 +70,12 @@ class App extends Component {
       .finally(this.toggleLoading);
   }
 
-  modalContentSet = itemId => {
-    // console.log('SURE', itemId);
-    const { imagesInfo } = this.state;
-    const element = imagesInfo.find(({ id }) => id === itemId);
-    this.setState({ modalContent: element.largeImageURL });
-  };
+  // modalContentSet = itemId => {
+  //   console.log(itemId);
+  //   const { visibleImages } = this.state;
+  //   const element = visibleImages.find(({ id }) => id === itemId);
+  //   this.setState({ modalContent: element.largeImageURL });
+  // };
 
   handleScroll = () => {
     window.scrollTo({
@@ -85,8 +85,7 @@ class App extends Component {
   };
 
   render() {
-    const { imagesInfo, loading, error, showModal, modalContent } = this.state;
-
+    const { imagesInfo, loading, error, showModal } = this.state;
     return (
       <>
         <Searchbar onSubmit={this.formSubmitHandler} />
@@ -94,16 +93,18 @@ class App extends Component {
         {imagesInfo && (
           <ImageGallery
             images={imagesInfo}
-            onClick={this.toggleModal}
-            onItemClick={this.modalContentSet}
+            // onItemClick={this.modalContentSet}
           />
         )}
         {loading && <Loader />}
         {imagesInfo.length > 0 && <Button loadMoreBTN={this.increasePage} />}
         <ToastContainer />
         {showModal && (
-          <Modal onClose={this.toggleModal}>
-            <img src={modalContent} alt="something" />
+          <Modal>
+            <img
+              src="https://pixabay.com/get/gc1cca42218f9ac3d933a8fce53476691c5bf60988835f58b8755ee87b8cfdd2d7ece5e0688b0539e21e18f5e47ef1e24_640.jpg"
+              alt="something"
+            />
           </Modal>
         )}
       </>
