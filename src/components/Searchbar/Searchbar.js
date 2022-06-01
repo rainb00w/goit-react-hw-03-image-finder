@@ -15,7 +15,8 @@ class SearchBar extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    if (event.target.elements.searchQuery.value.trim() === '') {
+    const searchText = event.target.elements.searchQuery.value;
+    if (searchText.trim() === '') {
       return toast.warn('Please, enter something', {
         position: 'top-center',
         autoClose: 1000,
@@ -26,9 +27,10 @@ class SearchBar extends Component {
         progress: undefined,
       });
     }
+
     const { searchQuery } = this.state;
     this.props.onSubmit(searchQuery);
-    this.setState({ searchQuery: '' });
+    // this.setState({ searchQuery: '' });
   };
 
   render() {

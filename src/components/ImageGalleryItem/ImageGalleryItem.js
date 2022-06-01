@@ -22,6 +22,10 @@ class ImageGalleryItem extends Component {
   }
 }
 
-ImageGalleryItem.propTypes = { imageURL: PropTypes.string.isRequired };
+ImageGalleryItem.propTypes = {
+  imageURL: PropTypes.string.isRequired,
+  imageID: PropTypes.number.isRequired,
+  onItemClick: PropTypes.func.isRequired,
+};
 
 export default ImageGalleryItem;

@@ -4,7 +4,7 @@ import ImageGallery from './ImageGallery';
 import Button from './Button';
 import axios from 'axios';
 import Loader from './Loader';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import Modal from './Modal';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -18,6 +18,7 @@ class App extends Component {
     error: null,
     showModal: false,
     modalContent: null,
+    totalImages: 0,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -31,6 +32,21 @@ class App extends Component {
   }
 
   formSubmitHandler = querry => {
+    if (querry === this.state.searchQuery) {
+      return toast.warn(
+        'Please, enter different querry or use "Load More" button',
+        {
+          position: 'top-center',
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+        }
+      );
+    }
+
     this.setState({ searchQuery: querry, page: 1, imagesInfo: [] });
   };
 
@@ -62,8 +78,11 @@ class App extends Component {
         return res;
       })
       .then(res => {
-        this.setState(({ imagesInfo }) => {
-          return { imagesInfo: [...imagesInfo, ...res.data.hits] };
+        this.setState(({ imagesInfo, totalImages }) => {
+          return {
+            imagesInfo: [...imagesInfo, ...res.data.hits],
+            totalImages: res.data.totalHits,
+          };
         });
       })
       .catch(error => this.setState({ error }))
@@ -85,8 +104,10 @@ class App extends Component {
   };
 
   render() {
-    const { imagesInfo, loading, error, showModal, modalContent } = this.state;
-
+    const { imagesInfo, loading, error, showModal, modalContent, totalImages } =
+      this.state;
+    const buttonRender =
+      imagesInfo.length > 0 && imagesInfo.length !== totalImages;
     return (
       <>
         <Searchbar onSubmit={this.formSubmitHandler} />
@@ -99,7 +120,7 @@ class App extends Component {
           />
         )}
         {loading && <Loader />}
-        {imagesInfo.length > 0 && <Button loadMoreBTN={this.increasePage} />}
+        {buttonRender && <Button loadMoreBTN={this.increasePage} />}
         <ToastContainer />
         {showModal && (
           <Modal onClose={this.toggleModal}>

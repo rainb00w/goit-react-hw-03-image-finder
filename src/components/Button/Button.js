@@ -1,4 +1,4 @@
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import s from './Button.module.css';
 
 const Button = ({ loadMoreBTN }) => {
@@ -11,6 +11,6 @@ const Button = ({ loadMoreBTN }) => {
   );
 };
 
-// Button.propTypes = { onSubmit: PropTypes.func.isRequired };
+Button.propTypes = { loadMoreBTN: PropTypes.func.isRequired };
 
 export default Button;
